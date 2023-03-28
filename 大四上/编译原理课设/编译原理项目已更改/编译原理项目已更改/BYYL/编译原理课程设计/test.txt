@@ -1,0 +1,12 @@
+VAR
+X,Y,Z,A,B,C,D:INTEGER;
+BEGIN
+WHILE (A+1)>(B+2) DO
+IF C>D THEN 
+X:=Y+Z 
+ELSE 
+Y:=X+Z
+END.
+
+
+

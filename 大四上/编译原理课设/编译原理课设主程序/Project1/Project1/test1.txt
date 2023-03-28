@@ -1,0 +1,16 @@
+VAR
+X,Y,Z,A,B,C,D:INTEGER;
+BEGIN  //这是注释  /*   */
+WHILE (A+1)>B DO
+IF C>D THEN 
+X:=Y+Z 
+ELSE 
+Y:=X+Z
+END.
+
+
+
+
+
+
+

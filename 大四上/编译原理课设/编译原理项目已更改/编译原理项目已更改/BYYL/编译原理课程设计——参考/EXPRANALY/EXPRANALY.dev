@@ -1,0 +1,20 @@
+[Project]
+FileName=C:\Users\aa\Desktop\编译原理课设\编译课设\EXPRANALY\EXPRANALY.dev
+Name=EXPRANALY
+Ver=2
+IsCpp=1
+Type=1
+Compiler=-D__GNUWIN32__ -W -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS 
+CppCompiler=-D__GNUWIN32__ -W -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS 
+Includes=
+Linker=-lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 
+Libs=
+UnitCount=1
+Folders="Source Files","Header Files","Resource Files"
+[Unit1]
+FileName=./main.c
+Folder="Source Files"
+Compile=1
+CompileCpp=0
+Link=1
+Priority=1000

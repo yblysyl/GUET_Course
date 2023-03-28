@@ -1,0 +1,17 @@
+VAR @
+X,Y,Z,A,B,C,D,fdy:INTEGER;
+BEGIN
+WHILE (A+65342171)>B DO
+IF C>D THEN 
+X:=Y+Z
+ELSE 
+Y:=X+Z
+END.
+
+
+
+
+
+
+
+

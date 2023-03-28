@@ -1,0 +1,13 @@
+VAR
+X,Y,Z,A,B,C,D:INTEGER;
+BEGIN
+WHILE A+1 DO //该行不符合语法规则
+X:=X+1 
+END.
+
+
+
+
+
+
+
