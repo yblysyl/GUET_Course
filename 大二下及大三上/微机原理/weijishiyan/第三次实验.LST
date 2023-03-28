@@ -1,0 +1,107 @@
+Turbo Assembler	 Version 5.0	    04-30-20 13:56:33	    Page 1
+rad4B012.ASM
+
+
+
+      1	0000			      DATA SEGMENT
+      2	0000  09 08 07 04 05 06	03+  BUF     DB	9,8,7,4,5,6,3,2,12,15		   ;存入数据
+      3	      02 0C 0F
+      4	      =000A		     count equ $-BUF
+      5	000A  54 48 45 20 4D 49	4E+  BU1 DB "THE MIN IS:",'$'
+      6	      20 49 53 3A 24
+      7	0016  0A 0D 54 48 45 20	4D+  BU2 DB 0AH,0DH,"THE MAX IS:",'$'
+      8	      41 58 20 49 53 3A	24
+      9				     ;程序段
+     10	0024			     DATA ENDS
+     11	0000			     CODE SEGMENT
+     12				     ASSUME CS:CODE, DS:DATA, ES: DATA
+     13	0000  B8 0000s		     START:MOV	     AX,     DATA
+     14	0003  8E D8			     MOV     DS,     AX
+     15	0005  B9 000A			     MOV CX,COUNT
+     16	0008  BE 0000r			     LEA SI,BUF			     ;数据引用
+     17	000B  8A 3C				     MOV BH,[SI]
+     18	000D  8A 1C			     MOV BL,[SI]
+     19	000F  8A 04		     X1:   MOV AL,[SI]
+     20	0011  E8 001F			     CALL DAXIAO	     ;调用程序
+     21	0014  46			     INC SI
+     22	0015  E2 F8			     LOOP X1
+     23	0017  BA 000Ar			      LEA    DX,BU1		     ;以下为输出
+     24	001A  B4 09			MOV AH,09H
+     25	001C  CD 21			     INT     21H
+     26	001E  8A C3			     MOV AL, BL
+     27	0020  E8 0020			     CALL SHUCHU
+     28	0023  BA 0016r			     LEA     DX,BU2
+     29	0026  B4 09			MOV AH,09H
+     30	0028  CD 21			     INT     21H
+     31	002A  8A C7			     MOV AL,BH
+     32	002C  E8 0014			     CALL SHUCHU
+     33
+     34
+     35
+     36	002F  B4 4C			   MOV AH,4CH
+     37	0031  CD 21			     INT     21H
+     38	0033			     DAXIAO PROC NEAR
+     39	0033  3A C3			     CMP AL,BL
+     40	0035  72 09			     JB	     X2
+     41	0037  3A C7			     CMP AL,BH
+     42	0039  72 07			     JB	X3
+     43	003B  8A F8			     MOV BH,AL		     ;保存大值
+     44	003D  EB 03 90			     JMP X3
+     45	0040  8A D8		     X2:   MOV BL,AL	     ;保存小值
+     46	0042			     X3:
+     47	0042  C3			     RET
+     48
+     49	0043			     DAXIAO ENDP
+     50
+     51	0043			     SHUCHU PROC NEAR			     ;转换输出
+     52	0043  8A D0			  MOV DL,AL
+     53	0045  80 FA 09			  CMP DL,09H
+     54	0048  72 03			  JB X4
+     55	004A  80 C2 07			  ADD DL,07H
+     56	004D  80 C2 30		     X4:  ADD DL,30H
+     57	0050  B4 02			  MOV AH,02H
+Turbo Assembler	 Version 5.0	    04-30-20 13:56:33	    Page 2
+rad4B012.ASM
+
+
+
+     58	0052  CD 21			  INT 21H
+     59
+     60	0054  C3			 RET
+     61	0055			     SHUCHU ENDP
+     62
+     63	0055			     CODE    ENDS
+     64					     END     START
+Turbo Assembler	 Version 5.0	    04-30-20 13:56:33	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "04-30-20"
+??FILENAME			  Text	 "rad4B012"
+??TIME				  Text	 "13:56:33"
+??VERSION			  Number 0500
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 RAD4B012
+@WORDSIZE			  Text	 2
+BU1				  Byte	 DATA:000A
+BU2				  Byte	 DATA:0016
+BUF				  Byte	 DATA:0000
+COUNT				  Number 000A
+DAXIAO				  Near16 CODE:0033
+SHUCHU				  Near16 CODE:0043
+START				  Near16 CODE:0000
+X1				  Near16 CODE:000F
+X2				  Near16 CODE:0040
+X3				  Near16 CODE:0042
+X4				  Near16 CODE:004D
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  0055 Para	  none
+DATA				  16  0024 Para	  none
+

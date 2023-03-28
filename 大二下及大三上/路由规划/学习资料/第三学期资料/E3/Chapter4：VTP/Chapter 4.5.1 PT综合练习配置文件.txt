@@ -1,0 +1,117 @@
+~~~~~~~~S1~~~~~~~~~~~
+en
+conf t
+host S1
+enable secret cisco
+banner motd "Access Authorized Only"
+no ip domain-lookup
+ip default-gateway 172.17.99.1
+line con 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+vtp mode server
+vtp domain CCNA
+vtp password cisco
+vlan 10
+name Faculty/Staff
+vlan 20
+name Students
+vlan 30
+name Guest(Default)
+vlan 99
+name Management&Native
+exit
+int r f0/1,f0/3
+sw mode trunk
+sw a v 99
+sw t na v 99
+exit
+int vlan 99
+ip add 172.17.99.31 255.255.255.0
+
+~~~~~~~~~~S2~~~~~~~~~~~~~~
+en
+conf t
+host S2
+enable secret cisco
+banner motd "Access Authorized Only"
+no ip domain-lookup
+ip default-gateway 172.17.99.1
+line con 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+vtp mode client
+vtp domain CCNA
+vtp password cisco
+int r f0/11,f0/18,f0/6
+sw m a 
+sw port-security
+sw port-security max 1
+sw port-security mac sticky
+sw port-security violation shutdown
+exit
+int f0/11
+sw a  v 10
+int f0/18
+sw a  v 20
+int f0/6
+sw a v 30
+int f0/1
+sw m t
+sw a v 99
+sw t na v 99
+int vlan 99
+ip add 172.17.99.32 255.255.255.0
+
+
+
+~~~~~~~~~~~~~~~S3~~~~~~~~~~~~~~~~~~~
+en
+conf t
+host S3
+enable secret cisco
+banner motd "Access Authorized Only"
+no ip domain-lookup
+ip default-gateway 172.17.99.1
+line con 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+exit
+service password-encryption
+vtp mode client
+vtp domain CCNA
+vtp password cisco
+int r f0/11,f0/18,f0/6
+sw m a 
+sw port-security
+sw port-security max 1
+sw port-security mac sticky
+sw port-security violation shutdown
+exit
+int f0/11
+sw a v 10
+int f0/18
+sw a  v 20
+int f0/6
+sw a v 30
+int f0/3
+sw m t
+sw a v 99
+sw t na v 99
+int vlan 99
+ip add 172.17.99.33 255.255.255.0
+
+

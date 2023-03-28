@@ -1,0 +1,90 @@
+Chapter Objectives for Routing Protocols and Concepts CCNA Exploration v4
+
+Upon completion of this course, you should be able to thoroughly answer the Chapter Objective questions. 
+The questions are provided here for you in .txt format to use as an outline to take notes 
+in a handwritten or electronic journal. 
+
+Chapter 1 Introduction to Routing and Packet Forwarding
+
+What features do routers and computers have in common?
+How do you configure Cisco devices and apply addresses?
+Can you describe the basic structure of a routing table?
+Can you describe, in detail, how a router determines the best path and then switches a packet?
+
+Chapter 2 Static Routing
+
+What is the role of a router in the network?
+Can you describe the relationship between router interfaces, directly connected networks, and the routing table?
+How can CDP be used with directly connected networks?
+How can static routes be used with exit interfaces?
+Can you describe the use and configuration of summary and default routes?
+How do packets get forwarded using static routes?
+What commands would you use to manage and troubleshoot static routes?
+
+Chapter 3 Introduction to Dynamic Routing Protocols
+
+Can you describe the role of dynamic routing protocols and place these protocols in the context of modern network design?
+What are several ways to classify routing protocols?
+How are metrics used by routing protocols, and what are the metric types used by dynamic routing protocols?
+How do you determine the administrative distance of a route, and what is its importance in the routing process?
+What are the different elements in the routing table?
+Given realistic constraints, can you devise and apply subnetting schemes?
+
+Chapter 4 Distance Vector Routing Protocols
+
+Can you identify the characteristics of distance vector routing protocols?
+What is the network discovery process of distance vector routing protocols using Routing Information Protocol (RIP)?
+What is the processes for maintaining accurate routing tables that are used by distance vector routing protocols?
+What are the conditions leading to a routing loop, and can you explain the implications for router performance?
+Which types of distance vector routing protocols are in use today?
+
+Chapter 5 RIP Version 1
+
+What are the functions, characteristics, and operation of the RIPv1 protocol?
+Can you configure a device for RIPv1?
+Can you verify proper RIPv1 operations?
+How does RIPv1 perform automatic summarization?
+Can you configure, verify, and troubleshoot default routes propagated in a routed network implanting RIPv1?
+What are the recommended techniques to solve problems related to RIPv1?
+
+Chapter 6 VLSM and CIDR
+
+What are the differences between classful and classless IP addressing?
+What is VLSM, and what are the benefits of classless IP addressing?
+What is the role of the classless interdomain routing (CIDR) standard in making efficient use of scarce IPv4 addresses?
+
+Chapter 7 RIPv2
+
+As a classful routing protocol, what are the limitations of RIPv1?
+What are the basic configuration commands used to apply Routing Information Protocol version 2 (RIPv2), and how do you evaluate RIPv2 classless routing updates?
+How do you analyze router output to see RIPv2 support for variable-length subnet masking (VLSM) and classless interdomain routing (CIDR)?
+Which commands are used to verify RIPv2 and identify common issues?
+What are the commands used to configure, verify, and troubleshoot RIPv2?
+
+Chapter 8 The Routing Table: A Closer Look
+
+What are the various route types found in the routing table structure?
+What is the route lookup process?
+How would you describe the typical routing behavior in a routed network?
+
+Chapter 9 EIGRP
+
+What is the background and history of EIGRP?
+What are the features and operations of EIGRP?
+What commands are used in configuring basic EIGRP, and what are their purposes?
+How is the composite metric calculated for EIGRP?
+What are the concepts and operation of DUAL?
+Which additional commands can be used in the configuration of EIGRP, and what are their uses?
+
+Chapter 10 Link-State Routing Protocols
+
+What are the basic features and concepts of link-state routing protocols?
+What are the benefits and requirements of link-state routing protocols?
+
+Chapter 11 OSPF
+
+What is the history and background of OSPF?
+What are the basic features of OSPF?
+Can you describe, modify, and calculate the metric used by OSPF?
+What is the Designated Router and Backup Designate Backup Router process in multiaccess networks?
+How is the default-information originate command configured in OSPF to propagate a default route?

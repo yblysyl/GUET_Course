@@ -1,0 +1,63 @@
+Turbo Assembler	 Version 5.0	    04-26-20 17:42:17	    Page 1
+rad6EDC8.ASM
+
+
+
+      1	0000			     DATA SEGMENT
+      2	0000  1E		     BUF     DB	     30
+      3	0001  3F			     DB	     '?'
+      4	0002  1E*(3F)			     DB	     30	     DUP('?')	      ;缓冲区
+      5	0020			     DATA ENDS
+      6	0000			     CODE SEGMENT
+      7				     ASSUME CS:CODE, DS:DATA, ES: DATA
+      8	0000  B8 0000s		     START:MOV	     AX,     DATA
+      9	0003  8E D8			     MOV     DS,     AX
+     10	0005  BA 0000r			     LEA DX,BUF
+     11	0008  B4 0A			     MOV AH,0AH
+     12	000A  CD 21			     INT     21H			     ;输入字符串
+     13	000C  BE 0001r			     LEA SI,BUF+1
+     14	000F  8A 0C			     MOV CL,[SI]
+     15	0011  B5 00			     MOV CH,00H				     ;设置循环次数
+     16	0013  BE 0002r			     LEA SI,BUF+2
+     17	0016  8A 04		      X2: MOV AL,[SI]
+     18	0018  3C 61			     CMP AL,61H
+     19	001A  72 06			     JB	     X1				     ;确定边界
+     20	001C  3C 7A			     CMP AL,7AH
+     21	001E  77 02			     JA	X1				     ;确定边界
+     22	0020  2C 20			     SUB AL,20H				     ;转换
+     23	0022  88 04		     X1:     MOV [SI],AL
+     24	0024  46			     INC SI
+     25	0025  E2 EF			     LOOP X2
+     26	0027  BA 0002r		     LEA     DX,BUF+2
+     27	002A  B4 09			MOV AH,09H
+     28	002C  CD 21			     INT     21H			     ;输出结果
+     29	002E  B4 4C			   MOV AH,4CH
+     30	0030  CD 21			     INT     21H
+     31	0032			     CODE    ENDS
+     32					     END     START
+Turbo Assembler	 Version 5.0	    04-26-20 17:42:17	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "04-26-20"
+??FILENAME			  Text	 "rad6EDC8"
+??TIME				  Text	 "17:42:17"
+??VERSION			  Number 0500
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 RAD6EDC8
+@WORDSIZE			  Text	 2
+BUF				  Byte	 DATA:0000
+START				  Near16 CODE:0000
+X1				  Near16 CODE:0022
+X2				  Near16 CODE:0016
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  0032 Para	  none
+DATA				  16  0020 Para	  none
+

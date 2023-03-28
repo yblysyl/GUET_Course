@@ -1,0 +1,76 @@
+Turbo Assembler	 Version 5.0	    04-26-20 16:37:29	    Page 1
+radF8D96.ASM
+
+
+
+      1	0000			     DATA SEGMENT
+      2	0000  48 41 50 50 59 20	41+  STRING1 DB	     'HAPPY ASM'       ;读入字符串1
+      3	      53 4D
+      4	      =0009		     LEN	     EQU     $-STRING1	      ;计算字符串长度
+      5	0009  48 41 50 50 59 20	41+  STRING2 DB	     'HAPPY ASM'	     ;读入字符串2
+      6	      53 4D
+      7	0012  4D 61 74 63 68 21	0D+  MSG1	     DB	     'Match!', 0DH, 0AH, '$'
+      8	      0A 24
+      9	001B  4E 6F 20 4D 61 74	63+  MSG2	     DB	     'No Match!', 0DH, 0AH, '$'
+     10	      68 21 0D 0A 24
+     11	0027			     DATA ENDS
+     12	0000			     CODE SEGMENT
+     13					     ASSUME CS:CODE, DS:DATA, ES: DATA
+     14	0000  B8 0000s		     START:MOV	     AX,     DATA
+     15	0003  8E D8			     MOV     DS,     AX
+     16	0005  8E C0			     MOV     ES,     AX
+     17	0007  BE 0000r			     LEA     SI,     STRING1		;读入字符串1
+     18	000A  BF 0009r			     LEA     DI,     STRING2	     ;读入字符串2
+     19	000D  B9 0009			     MOV     CX,     LEN
+     20	0010			     COMPARE:
+     21	0010  8A 04			     MOV     AL,     [SI]
+     22	0012  8A 1D			     MOV     BL,     [DI]
+     23	0014  3A C3			     CMP     AL,     BL
+     24	0016  75 0B			     JNE     DISMATCH				     ;比较当前位
+     25	0018  46			     INC     SI
+     26	0019  47			     INC     DI
+     27	001A  49			     DEC     CX					     ;判定是否比较完毕
+     28	001B  75 F3			     JNZ     COMPARE
+     29
+     30
+     31	001D  BA 0012r		     MATCH:LEA	     DX,     MSG1
+     32	0020  EB 04 90			     JMP     DISP
+     33	0023  BA 001Br		     DISMATCH:LEA    DX,     MSG2
+     34	0026  B4 09		     DISP:MOV	     AH,     09H			     ;输出
+     35	0028  CD 21			     INT     21H
+     36	002A  B4 4C			     MOV     AH,     4CH
+     37	002C  CD 21			     INT     21H
+     38	002E			     CODE    ENDS
+     39					     END     START
+Turbo Assembler	 Version 5.0	    04-26-20 16:37:29	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "04-26-20"
+??FILENAME			  Text	 "radF8D96"
+??TIME				  Text	 "16:37:29"
+??VERSION			  Number 0500
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 RADF8D96
+@WORDSIZE			  Text	 2
+COMPARE				  Near16 CODE:0010
+DISMATCH			  Near16 CODE:0023
+DISP				  Near16 CODE:0026
+LEN				  Number 0009
+MATCH				  Near16 CODE:001D
+MSG1				  Byte	 DATA:0012
+MSG2				  Byte	 DATA:001B
+START				  Near16 CODE:0000
+STRING1				  Byte	 DATA:0000
+STRING2				  Byte	 DATA:0009
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  002E Para	  none
+DATA				  16  0027 Para	  none
+
