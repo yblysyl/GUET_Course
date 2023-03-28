@@ -1,0 +1,26 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+ENTITY MUX4_1 IS 
+PORT(
+    I11,I10:IN STD_LOGIC;
+    R0,R1,R2,R3:IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    X:OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+);
+END MUX4_1;
+ARCHITECTURE A OF MUX4_1 IS
+BEGIN
+    PROCESS
+    BEGIN
+        IF(I11='0' AND I10='0') THEN
+            X<=R0;
+        ELSIF(I11='0' AND I10='1') THEN
+            X<=R1;
+        ELSIF(I11='1' AND I10='0') THEN
+            X<=R2;
+        ELSE
+            X<=R3;
+        END IF;
+    END PROCESS;
+END A;
+
+

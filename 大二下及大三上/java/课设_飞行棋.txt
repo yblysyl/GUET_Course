@@ -1,0 +1,515 @@
+package 飞行棋;
+
+import java.awt.Color;
+import java.awt.FileDialog;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Random;
+import java.util.Stack;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+public class jiemian extends JFrame implements ActionListener{
+	int i=0,j=0;    //i等于一开始游戏，等于零未开始   j  AB方切换
+	int t=0;      //决定是否行走 1为可以行走
+	int ran1;//筛子点数
+	int aa[];     // cunfang按钮颜色信息；
+int aab1[],aab2[];   /////保存飞机坐标
+	JButton [] a;  //地图
+	FileDialog sv,op;////保存打开按钮
+	 jiegouti jie1=new jiegouti();//////保存当前状态
+	 Stack<jiegouti> stack1= new Stack<jiegouti>();  ///保存状态
+	 Stack<jiegouti> stack2;//回放使用
+     int huifang=0;         //判定回放，1为回放态
+	 
+     JLabel jll1,jll2,jll3;
+	JButton [] tingjiping;
+	  JLabel jl;
+	JButton b,c,d,ee,f,g,h;
+	JTextField jt,jt2;
+	Random ran=new Random();
+	public jiemian() {
+		into();	
+		setBounds(500,50,1000,1000);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	void into() {
+		setTitle("飞行棋");
+		setLayout(null);
+		///////////////////////////////////////////////////////////////////////////菜单按钮
+		 b=new JButton("开始");
+		c=new JButton("结束");
+		 d=new JButton("保存");
+		 ee=new JButton("读取记录");
+		 f=new JButton("回放");
+		 g=new JButton("结束回放");
+		 h=new JButton("掷色子");
+		b.setBounds(200, 50, 100, 30);
+		c.setBounds(320, 50, 100, 30);
+		d.setBounds(440, 50, 100, 30);
+		ee.setBounds(560, 50, 100, 30);
+		f.setBounds(680, 50, 100, 30);
+		g.setBounds(800, 50, 100, 30);
+		h.setBounds(440, 200, 100, 30);
+		add(b);add(c);add(d);add(ee);add(f);add(g);add(h);
+      b.addActionListener(this);
+      c.addActionListener(this);
+      d.addActionListener(this);
+      ee.addActionListener(this);
+      f.addActionListener(this);
+      g.addActionListener(this);
+      h.addActionListener(this);
+      /////////////////////////////////////////////////////////         交互相关
+      jt=new JTextField(10);
+      JLabel jl1=new JLabel("请输入飞机数量；最大为4");
+      jt2=new JTextField(10);
+      jl=new JLabel("0");
+      JLabel jl2=new JLabel("人人请输入1；人机请输入2");
+      jl1.setBounds(150, 150, 200, 30);
+      jt.setBounds(400, 150, 50, 30);
+      jl2.setBounds(500, 150, 200, 30);
+     jl.setBounds(560, 200, 100, 30);
+      jt2.setBounds(750, 150, 50, 30);
+      add(jt);add(jt2);add(jl2);add(jl1);add(jl);
+      ////////////////////////////////////////////////////////////////// 地图
+      
+      
+      jll1=new JLabel("当前玩家：A");
+      jll1.setBounds(600, 200, 100, 30);
+      jll2=new JLabel("飞");
+      jll3=new JLabel("飞");
+      jll2.setBounds(600-20,400+30+200, 20, 30);
+      jll3.setBounds(350+50,250-30+200, 50, 30);
+      add(jll2);add(jll3);add(jll1);
+      //////////////////////////////////////////////////////////////////////////////
+		aa=new int[80];
+		a=new JButton[80];
+		for(int i=0;i<a.length;i++) {
+			a[i]=new JButton();
+		add(a[i]);
+		a[i].addActionListener(this);
+		if(i<5)a[i].setBounds(400+i*50, 100+200, 50, 30);
+		else if(i<10)a[i].setBounds(600,100+(i-4)*30+200, 50, 30);
+		else if(i<15)a[i].setBounds(600+(i-9)*50,250+200, 50, 30);
+		else if(i<20)a[i].setBounds(850,250+(i-14)*30+200, 50, 30);
+		else if(i<25)a[i].setBounds(850-(i-19)*50,400+200, 50, 30);
+		else if(i<30)a[i].setBounds(600,400+(i-24)*30+200, 50, 30);
+		else if(i<35)a[i].setBounds(600-(i-29)*50,550+200, 50, 30);
+	else if(i<40)a[i].setBounds(350,550-(i-34)*30+200, 50, 30);
+	else if(i<45)a[i].setBounds(350-(i-39)*50,400+200, 50, 30);
+	else if(i<50)a[i].setBounds(100,400-(i-44)*30+200, 50, 30);
+	else if(i<55)a[i].setBounds(100+(i-49)*50,250+200, 50, 30);
+	else if(i<60)a[i].setBounds(350,250-(i-54)*30+200, 50, 30);
+	else if(i<65)a[i].setBounds(450,300+(i-59)*30, 50, 30);
+	else if(i<70)a[i].setBounds(850-(i-64)*50,510, 50, 30);
+	else if(i<75)a[i].setBounds(500,750-(i-69)*30, 50, 30);
+    else if(i<80)a[i].setBounds(100+(i-74)*50,540, 50, 30);
+		////////////////////////////////////////颜色
+	//	a[i].setText(""+i);
+		if(i>=75) {aa[i]=2;a[i].setBackground(Color.green);}
+		else if(i>=70){aa[i]=3;a[i].setBackground(Color.orange);}
+		else if(i>=65){aa[i]=0;a[i].setBackground(Color.red);}
+		else if(i>=60){aa[i]=1;a[i].setBackground(Color.cyan);}
+		else {
+		aa[i]=i%4;
+		if(i%4==0)a[i].setBackground(Color.red);
+		if(i%4==1)a[i].setBackground(Color.cyan);
+		if(i%4==2)a[i].setBackground(Color.green);
+		if(i%4==3)a[i].setBackground(Color.orange);
+		}
+		//////////////雷
+		if(i==18||i==52)a[i].setText("雷");
+	}
+///////////////////////////////////////////////////////////////////////// /               停机台
+		tingjiping=new JButton[5];
+		for(int i=0;i<tingjiping.length;i++) {
+			tingjiping[i]=new JButton();
+			tingjiping[i].addActionListener(this);
+		add(tingjiping[i]);
+		}
+		tingjiping[4].setBounds(450,510, 100, 60);
+		tingjiping[0].setBounds(650, 330, 70, 40);
+		tingjiping[0].setBackground(Color.cyan);
+		tingjiping[1].setBounds(280,710, 70, 40);
+		tingjiping[1].setBackground(Color.orange);
+		
+		////////////////////////////////////////////////////////////////////////////////
+		sv=new FileDialog(this,"保存",FileDialog.SAVE); //保存功能
+		op=new FileDialog(this,"打开",FileDialog.LOAD); //打开功能
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		//////////////////////////////////////////////////////////////////////////////////////判胜
+		if(i==1) {
+			int ttt1=0,ttt2=0;
+			for(int i=0;i<aab1.length;i++)ttt1=ttt1+aab1[i];
+			for(int i=0;i<aab2.length;i++)ttt2=ttt2+aab2[i];
+			if(ttt1==0&&tingjiping[0].getText().equals("0")) {jll1.setText("A玩家获胜");t=0;}
+			if(ttt2==0&&tingjiping[1].getText().equals("0")) {jll1.setText("B玩家获胜");t=0;}
+		}
+		
+		
+		
+		/////////////////////////////////////////////////////////////////// //////////////////// 回放
+		if(e.getSource().equals(g)&&t==0&&i==1&&huifang==1) {   //结束回放
+			huifang=0;
+			genghuanzhuangtai( jie1);
+		}
+		
+		if(e.getSource().equals(f)&&t==0&&i==1) {    //开始回放
+			if(huifang==0) {
+				 stack2 = (Stack<jiegouti>) stack1.clone ();
+				 if(stack2.empty())return;
+				 jiegouti p2=stack2.pop();
+				 genghuanzhuangtai(p2);
+			}
+			else if(huifang==1){
+				if(stack2.empty())return;
+				 jiegouti p2=stack2.pop();
+				 genghuanzhuangtai(p2);
+			}
+			huifang=1;
+		}
+		////////////////////////////////////////////////////////////////////
+		if(huifang==1)return;                   //回放态判定
+		///////////////////////////////////////////////////////////////// 开始
+		if(e.getSource().equals(b)) {
+		//	System.out.println(i);
+			if(i==1)return;
+		//	System.out.println("2");
+			if(jt.getText().matches("[1234]")&&jt2.getText().matches("[12]")) {
+				i=1;j=0;tingjiping[0].setText(jt.getText());
+				tingjiping[1].setText(jt.getText());
+				aab1=new int[jt.getText().charAt(0)-'0'];
+		    	jie1.aab1= new int[jt.getText().charAt(0)-'0'];
+				aab2=new int[jt.getText().charAt(0)-'0'];
+				jie1.aab2=new int[jt.getText().charAt(0)-'0'];
+				jt.setEditable(false);
+				jt2.setEditable(false);
+				}
+			else i=0;
+			stack1= new Stack<jiegouti>();  
+			baocun() ;
+			return;
+		}
+		/////////////////////////////////////////   产随机数
+		if(e.getSource().equals(h)) {
+			if(i==0||t==1)return;
+			 ran1=ran.nextInt(6)+1;
+			 t=1;
+			jl.setText(""+ran1);
+	         j++;
+	         if(j%2==1)jll1.setText("当前玩家：A");
+	         else jll1.setText("当前玩家：B");
+		return;
+		}///////////////////////////////////////////////////////////////////////////////结束游戏
+		if(e.getSource().equals(c)) {
+			if(i==0)return;
+			i=0;
+			j=0;
+			t=0;
+			jt.setEditable(true);
+			jt2.setEditable(true);
+			jl.setText("0");
+			for(int i=0;i<a.length;i++)a[i].setText("");
+			jie1=new jiegouti();
+		}
+		/////////////////////////////////////////////////////////////////////////////////////   行走判定
+		///////////////////////////////////////起飞
+		if(e.getSource().equals(tingjiping[0])&&ran1>=1&&j%2==1&&t==1) {
+			if(i==0)return;
+			if(tingjiping[0].getText().equals("0"))return;
+			if(ran1==1||ran1==5)ran1=ran1+4;
+			int p=0;
+			while(aab1[p]!=0)p++;
+			a[4+ran1].setText("A"+p);
+			tingjiping[0].setText(""+(tingjiping[0].getText().charAt(0)-'1'));
+			aab1[p]=4+ran1;
+			t=0;
+			baocun() ;
+			return;
+		}
+		if(e.getSource().equals(tingjiping[1])&&ran1>=1&&j%2==0&&t==1) {
+			if(i==0)return;
+			if(tingjiping[1].getText().equals("0"))return;
+			if(ran1==1||ran1==5)ran1=ran1+4;
+			int p=0;
+			while(aab2[p]!=0)p++;
+			 a[34+ran1].setText("B"+p);
+				tingjiping[1].setText(""+(tingjiping[1].getText().charAt(0)-'1'));
+			 aab2[p]=34+ran1;
+			 t=0;
+			 baocun() ;
+			return;
+		}
+		////////////////////////////////////////////////非起飞
+		if(e.getActionCommand().matches("A[0123]")&&j%2==1&&t==1) {
+			if(i==0)return;
+			int p=e.getActionCommand().charAt(1)-'0';
+			a[aab1[p]].setText("");
+			if(aab1[p]+ran1==25||aab1[p]+ran1==21) {        /////飞
+				t=0; 
+				a[38].setText("A"+p);
+				aab1[p]=38;
+				baocun() ;
+				return;
+			}
+			/////////////////////////////////////////////////////////////////////////   拐角判定
+			if(aab1[p]+ran1<=61&&aab1[p]+ran1>59&&aab1[p]<=59) {
+				t=0; 
+				a[aab1[p]+ran1-60].setText("A"+p);
+				aab1[p]=aab1[p]+ran1-60;
+				baocun() ;
+				return;
+			}
+			if(aab1[p]+ran1>61&&aab1[p]<=59) {
+				t=0; 
+				a[aab1[p]+ran1-2].setText("A"+p);
+				aab1[p]=aab1[p]+ran1-2;
+				baocun() ;
+				return;
+			}
+			if(aab1[p]==0||aab1[p]==1) {
+				if(aab1[p]==1) {
+					t=0; 
+					if(ran1!=6)a[ran1+59].setText("A"+p);
+					aab1[p]=ran1+59;
+					if(ran1==6)aab1[p]=0;
+					baocun() ;
+					return;
+				}
+				else if(aab1[p]==0) {
+					t=0; 
+					if(ran1==1) {
+						a[1].setText("A"+p);
+						aab1[p]=1;
+					}
+					else {
+					a[ran1+58].setText("A"+p);
+					aab1[p]=ran1+58;}
+					baocun() ;
+					return;
+				}
+			}
+			if(aab1[p]>=60) {
+				if(aab1[p]+ran1==65) {
+					t=0; 
+					aab1[p]=0;
+					baocun() ;
+					return;
+				}
+				else {
+					t=0;
+					int fn=Math.abs(aab1[p]+ran1-65);
+					a[65-fn].setText("A"+p);
+					aab1[p]=65-fn;
+					baocun() ;
+					return;
+				}
+			}
+			
+			/////////////////////////////////////////////////////////
+			
+			if(aa[aab1[p]+ran1]==1) {if(aab1[p]+ran1==57)aab1[p]=1-ran1;else ran1=ran1+4;}
+			if(a[aab1[p]+ran1].getText().matches("B[0123]")) {
+				tingjiping[1].setText(""+(tingjiping[1].getText().charAt(0)-'0'+1));
+				aab2[a[aab1[p]+ran1].getText().charAt(1)-'0']=0;
+			}
+			if(a[aab1[p]+ran1].getText().equals("雷")) { /////雷
+				t=0; 
+				a[aab1[p]].setText("A"+p);
+				baocun() ;
+				return;
+			}
+			a[aab1[p]+ran1].setText("A"+p);
+			aab1[p]=aab1[p]+ran1;
+			t=0;
+			baocun() ;
+			return;
+		}
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////b玩家
+		if(e.getActionCommand().matches("B[0123]")&&j%2==0&&t==1) {
+			if(i==0)return;
+			int p=e.getActionCommand().charAt(1)-'0';
+			a[aab2[p]].setText("");
+			if(aab2[p]+ran1==55||aab2[p]+ran1==51) {        /////飞
+				t=0; 
+				a[8].setText("B"+p);
+				aab2[p]=8;
+				baocun() ;
+				return;
+			}
+			/////////////////////////////////////////////////////////////          拐角判定
+			if(aa[aab2[p]+ran1]==3&&aab2[p]+ran1!=31&&aab2[p]<70&&aab2[p]+ran1<70) ran1=ran1+4;
+			if(aab2[p]>=70) {
+				if(aab2[p]+ran1==75) {
+					t=0; 
+					aab2[p]=0;
+					baocun() ;
+					return;
+				}
+				else {
+					t=0;
+					int fn=Math.abs(aab2[p]+ran1-75);
+					a[75-fn].setText("B"+p);
+					aab2[p]=75-fn;
+					baocun() ;
+					return;
+				}
+			}
+			if(aab2[p]+ran1>59&&aab2[p]+ran1<70)aab2[p]=aab2[p]+ran1-60-ran1;
+			if(aab2[p]+ran1>31&&aab2[p]<31)aab2[p]=aab2[p]+ran1-31+69-ran1;
+			if(aab2[p]==31) {
+				t=0; 
+				if(ran1!=6) {a[69+ran1].setText("B"+p);
+				aab2[p]=ran1+69;}
+				else aab2[p]=0;
+				baocun() ;
+				return;
+			}
+
+			//////////////////////////////////////////////////
+			
+			if(a[aab2[p]+ran1].getText().matches("A[0123]")) {
+				tingjiping[0].setText(""+(tingjiping[0].getText().charAt(0)-'0'+1));
+				aab1[a[aab2[p]+ran1].getText().charAt(1)-'0']=0;
+			}
+			if(a[aab2[p]+ran1].getText().equals("雷")) {/////雷
+				a[aab2[p]].setText("B"+p);
+				baocun() ;
+				t=0; return;
+			}
+			a[aab2[p]+ran1].setText("B"+p);
+			aab2[p]=aab2[p]+ran1;
+			t=0;
+			baocun() ;
+			return;
+		}
+		////////////////////////////////////////////////////////////////////////////////////////保存读入
+		if(e.getSource()==ee) //如果点击的是open按钮
+		{
+		op.setVisible(true);
+		try //将文件打开读取到界面上的TextArea组件中显示出来
+		{
+		File fl=new File(op.getDirectory(),op.getFile());
+		FileInputStream filein=new FileInputStream(fl);
+		ObjectInputStream objectin=new ObjectInputStream(filein);
+		jie1=(jiegouti)objectin.readObject();
+		 stack1=new Stack<jiegouti>();  
+		 genghuanzhuangtai(jie1);
+		 baocun();
+		 jll1.setText("掷色子");
+		jt.setEditable(false);
+		jt2.setEditable(false);
+		objectin.close();
+		}
+		catch(Exception e1)
+		{
+		}
+		}
+		if(e.getSource()==d&&i==1&&t==0) //如果点击的是save按钮
+		{
+		sv.setVisible(true);
+		jie1.t1=jt.getText();
+		jie1.t2=jt2.getText();
+		try //将TextArea中的内容写入到文件中保存
+		{
+		File fl=new File(sv.getDirectory(),sv.getFile());
+		FileOutputStream fileout=new FileOutputStream(fl);
+		ObjectOutputStream objectout=new ObjectOutputStream(fileout);
+		objectout.writeObject(jie1);
+		objectout.close();
+		}
+		catch(Exception e1){}
+		}
+		
+		
+	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////  相关函数
+  public void genghuanzhuangtai(jiegouti jie1) {             //改变状态
+		i=jie1.i;
+		j=jie1.j;
+		t=jie1.t;
+		ran1=jie1.ran1;
+		jt.setText(jie1.t1);
+		jt2.setText(jie1.t2);
+		tingjiping[0].setText(jie1.t3);
+		tingjiping[1].setText(jie1.t4);
+		aab1=new int[jt.getText().charAt(0)-'0'];
+		aab2=new int[jt.getText().charAt(0)-'0'];
+		
+		for(int i=0;i<a.length;i++) {
+			a[i].setText("");
+			if(i==18||i==52)a[i].setText("雷");
+		}
+		for(int i=0;i<aab1.length;i++) {
+			aab1[i]=jie1.aab1[i];
+			if(aab1[i]!=0)a[aab1[i]].setText("A"+i);
+		}
+		for(int i=0;i<aab2.length;i++) {
+			aab2[i]=jie1.aab2[i];
+			if(aab2[i]!=0)a[aab2[i]].setText("B"+i);
+		}
+  }
+  public void  baocun() {                                                        //     保存
+	 zhuangtaibaocun(jie1);
+	 jiegouti p2=new jiegouti();
+    p2.aab1= new int[jt.getText().charAt(0)-'0'];
+	p2.aab2=new int[jt.getText().charAt(0)-'0'];
+	zhuangtaibaocun(p2);
+	stack1.add(p2);
+  }
+  
+  public void zhuangtaibaocun(jiegouti jie1) {                //保存状态
+		jie1.i=i;
+		jie1.j=j;
+		jie1.t=t;
+		jie1.ran1=ran1;
+		jie1.t1=jt.getText();
+		jie1.t2=jt.getText();
+		jie1.t3=tingjiping[0].getText();
+		jie1.t4=tingjiping[1].getText();
+		for(int i=0;i<aab1.length;i++) {
+			jie1.aab1[i]=aab1[i];
+		}
+		for(int i=0;i<aab2.length;i++) {
+			jie1.aab2[i]=aab2[i];
+		}
+  }
+////////////////////////////////////////////
+}
+
+class jiegouti implements Serializable{                      ////////////////////保存数据的结构体
+	int i=0,j=0;    //i等于一开始游戏，等于零未开始   j  AB方切换
+	int t=0;      //决定是否行走
+	int ran1;//筛子点数
+int aab1[],aab2[];   /////保存飞机坐标
+String t1=new String(),t2=new String();
+String t3=new String();
+String t4=new String();
+}
+
+
+
