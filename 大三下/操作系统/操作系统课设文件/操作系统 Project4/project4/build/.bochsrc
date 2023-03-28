@@ -1,0 +1,17 @@
+config_interface: textconfig
+romimage: file=/usr/share/bochs/BIOS-bochs-latest
+#address=0xf0000
+megs: 8
+vgaromimage: file=/usr/share/vgabios/vgabios.bin
+floppya: 1_44=./fd.img, status=inserted
+boot: a
+ips: 1000000
+log:./bochs.out
+vga_update_interval: 300000
+keyboard_serial_delay: 250
+keyboard_paste_delay: 100000
+private_colormap: enabled=0
+mouse:enabled=0
+private_colormap:enabled=0
+ata0:enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14
+ata0-master:type=disk,mode=flat,path=diskc.img,cylinders=40,heads=8,spt=64
