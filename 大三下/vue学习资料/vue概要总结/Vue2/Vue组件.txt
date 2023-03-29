@@ -1,0 +1,266 @@
+使用组件的基本方式是: 
+1. 创建组件
+2. 使用组件的<scripts>内import导入组件，并注册组件（注册在component中）
+3. 使用组件名作为标签元素引用组件
+
+注意：新建命名用Sdd-Add这种驼峰or横杠方式可以避免命名不规范问题
+更改组件名(这个比较麻烦),也就是重新起个组件名,使其符合命名规范,如: StudentName 或者 student-name
+修改配置项,关闭语法检查
+1.在项目的根目录找到(没有就创建)vue.config.js文件
+2.在文件中添加如下内容
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+ lintOnSave:false
+})
+
+Render方法渲染组件：
+入口main.js中，默认使用render方法将App.vue组件渲染到模板html界面中
+render方法渲染组件，实际上是 = 组件注册+引用组件
+render: h => h(App)==render:function(createElement){(return createElement(app)}
+new Vue({
+  render: h => h(App),  
+}).$mount('#app')
+等于
+导入vue改为import Vue from 'vue/dist/vue'
+在html中引入app
+Vue.config.productionTip = false
+
+var vm =new Vue({
+  el:"#app",
+  components: {
+    App
+  }
+})
+
+帮助：
+一个vue文件就是一个vue组件:vscode添加vueHelper插件快速创建vue
+组件须知:
+1:组件里的template部分只能包含一个根元素
+2:组件可以复用，组件里还能再包含组件，只要导入组件并注册组件，就可以使用组件
+3:A组件包含B组件，A是父组件，B是子组件。A组件又被包含在Vue实例中，Vue实例相当于是A的父组件
+
+
+组件中的data和methods
+组件中的data属性必须是一个函数，因为这样可以确保组件中data绑定的数据只属于组件内部
+组件中的methods属性定义和Vm实例methods属性定义一样
+export default {
+  name: 'App',
+  data(){
+    return{
+      msg:"hellow word",
+      msg2:"ppp"
+    }
+  }
+}
+
+eg2
+export default {
+    data () {
+        return {
+            count:0,
+        }
+    },
+    methods: {
+        rest(){
+            this.count=0;
+        }
+    }
+}
+动态组件
+所谓动态组件就是同一位置的多个组件切换显示: 
+主要是<component v-bind:is="comName"></component>标签的使用，如下更改is属性的值
+	<button @click="comName='Login'">登录</button>
+    	<button @click="comName='Register'">注册</button>
+    	<!-- component组件绑定is属性：指定加载的组件名称 -->
+    	<component v-bind:is="comName"></component>
+
+动态组件切换动画
+<!-- mode="out-in": 设置过渡模式，out-in:表示入场动画完全退出之后，离场动画再开始进入-->
+<transition mode="out-in">
+<component v-bind:is="comName"></component>
+</transition>
+
+设置css
+.v-enter { opacity: 0; transform: 
+translateX(150px);}
+.v-enter-to { opacity: 1; transform: 
+translateX(0px);}
+.v-enter-active { transition: all 0.8s ease; }
+.v-leave {opacity: 1; transform: translateX(0px);}
+.v-leave-to {opacity: 0; transform: 
+translateX(150px);}
+.v-leave-active {transition: all 0.8s ease;}
+
+v-move和v-leave-active绝对定位解决组件切换的
+错位问题
+.v-move {transition: all 0.8s ease;}
+.v-leave-active { position: absolute;}
+
+
+
+
+组件传值
+父组件通过v-bind:属性名=‘属性值’的方式发送数据到子组件, 子组件通过props属性，接受来自父组件的数据
+<component v-bind:is="comName" v-bind:td="name"></component>
+子组件里写
+export default {
+    props:["td"],    td为绑定的属性名 引用直接用{{td}}
+}
+
+子组件向父组件传值
+vue中，子组件向父组件传值是通过事件绑定实现的，并不能够向父给子传递那样，通过v-bind和props来完成，父组件在引用子组件处，通过v-on:事件名称=”xx”绑定一个方法，比如: v-on:func=”m”，
+2. 子组件内，当需要与父组件通信时，通过触发某一事件的函数，比如v-on:clic，在这个函数处理内调用: this.$emit(‘func’,’参数’) ==>触发父组件的func事件绑定的方法，也就是m。this.$emit(‘func’,’xx’): 这里的func就是父组件v-on绑定的事件名称这里的xx就是子组件要向父组件传递的数据，作为事件方法的参数传递，父组件中的m方法定义参数就可以接收数据了
+
+
+eg
+<component v-bind:is="comName" v-bind:td="name" v-on:func="fz"></component>
+定义fz方法 将传回的数据放在msg3
+methods:{
+    fz(data){
+      this.msg3 = data;
+    }
+  }
+子组件中
+<button @click="send">点击返回给父组件信息</button>
+在函数send中
+send(){
+            this.$emit("func",this.tof )  //关键语句 第一个参数为绑定的函数名，第二个参数为传回的数据
+   }
+
+
+
+插槽
+插槽基本用法和插槽的作用  <slot></slot>
+插槽的作用:<slot>标签的位置被引用组件的标签元素内包含的内容替换了
+父组件中  <Hello>你好</Hello> 子组件中<h1>Hello组件:<slot></slot></h1> //<slot></slot>被你好替代
+
+具名插槽
+就是给插槽定义个名字，让插槽根据名字去替换内容
+eg:
+<div>父组件
+        <Hello>
+            <div slot="girl">
+            受欢迎的女人:漂亮、美丽、购物、逛街
+            </div>
+            <div slot="boy">
+            受欢迎的男人:有钱、很有钱、非常有钱
+            </div>
+            <!-- 默认插槽 -->
+            <div>
+            这里是屌丝聚集的地方
+            </div>
+        </Hello>
+    </div>
+<div>	子组件
+      <h1>Hello组件:</h1>
+      <slot name="girl"></slot>
+      <slot name="boy"></slot>
+      <slot></slot>
+  </div>
+
+
+作用域插槽
+父传子
+组件元素（父）标签v-bind:属性绑定数据到slot插槽所在的组件模板，组件模板（子）内通过props获取数据
+子传父
+组件模板（子）<slot>标签v-bind:绑定数据，组件元素（父）内Slot替换标签元素定义slot-scope=“a”接收数据,a是任意的、只是一个接收数据的变量名。
+<Hello :chuanzhi="cz">
+            <div slot="girl">
+            受欢迎的女人:漂亮、美丽、购物、逛街
+            </div>
+            <div slot="boy">
+            受欢迎的男人:有钱、很有钱、非常有钱
+            </div>
+            <!-- 默认插槽 -->
+            <div>
+            这里是屌丝聚集的地方
+            </div>
+            <div slot-scope="a">收取返回数据{{a.cs}}</div>
+        </Hello>
+
+{{chuanzhi}}<h3>jieguo</h3>
+      <slot :cs="chuanzhi"></slot>
+
+
+
+ref
+ref标记属性是vue提供给开发者快速获取组件实例，也能快速获取dom元素(获取到的是一个原生js对象)的技术
+ 获取dom
+<h3 id="myh3" ref="myh3">哈哈哈， 今天天气太好了！！！</h3>
+this.$refs.myh3.innerText
+
+获取组件
+ 获取组件:调用组件methods属性中的方法: this.$refs.demo.show();
+ 获取组件:获取组件data属性中的数据: this.$refs.demo.msg
+
+ <h3 id="myh3" ref="myh3">测试ref</h3>
+        <input type="button" value="获取dom元素" @click="getDom"/>
+        <input type="button" value="获取组件数据" @click="getDom1"/>
+        <input type="button" value="获取组件方法" @click="getDom2"/>
+ methods: {
+        getDom(){
+            alert(this.$refs.myh3.innerText);
+        },
+        getDom1(){
+           alert(this.$refs.sd.refcsdata); 
+        },
+        getDom2(){
+            this.$refs.sd.refcsff();
+            
+        },
+    }
+
+
+子组件调用数据
+export default {
+    props: ["chuanzhi"],
+    data () {
+      return {
+        refcsdata:"ref获取组件数据",
+      }
+    },
+    methods: {
+      refcsff(){
+        alert("ref获取方法成功");
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

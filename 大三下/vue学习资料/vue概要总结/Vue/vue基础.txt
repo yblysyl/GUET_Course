@@ -1,0 +1,383 @@
+新疆项目 目录命令窗口 vue ui
+运行项目 npm run dev/server
+问题：
+该两行规则
+"rules": {
+      "no-unused-vars": 0,
+      "no-console": 0
+    } 先改packger下的rules规则
+cnpm导入项目依赖库
+导入bootstrap npm install bootstrap
+凡是在npm 安装依赖的时候出现 上图所示的警告(requires a peer of jquer@1.9.1-3)，表示当前这个库依赖的库没有安装上，只要将要求的依赖库安装上即可 如 npm i jquer@1.9.1-3
+
+cnpm常用安装命令的区别:
+ npm i module_name -S = > npm install module_name --save 写入到 dependencies 对象
+ npm i module_name -D => npm install module_name --save-dev 写入到 devDependencies 对象
+ npm i module_name -g 全局安装
+ npm i module_name 安装到当前目录的nodu_modules,但不会写入到dependencies和devDependencies中，在项目开发时，不建议使用
+
+
+
+
+
+
+
+基础知识
+v-text与v-html
+
+<html>
+<body>
+<div id="app">
+<p v-text="msg"></p> 	可以调用data里的数据用对应名称  
+<p v-html="msg2"></p>
+{{msg3}} 			//双括号也能取值
+</div>
+</html>
+
+var vm = new Vue({
+el:"#app", 
+data:{ 
+msg:"欢迎学习vue",
+msg2:"<h1>我是一个H1标题，让我变大！</h1>"
+msg3:"nihao"
+}
+})
+
+v-bind属性和v-on事件
+v-bind: 元素属性绑定，绑定的数据，在vm实例的data属性中声明 简写：
+v-on: 元素事件绑定，事件绑定对应的函数，在vm实例的methods属性中声明 简写@函数
+<button v-on:click="myclick">click me</button>
+<a v-bind:href="url">click me to baidu</a> url在data{}里声明 方法在methods：{}里声明
+
+
+v-model
+v-bind 或者{{xx}} 插值表达式只能实现数据的单向绑定，.从 M 自动绑定到 V 无法实现数据的双向绑定,当v变化
+的时候，M也自动更新,这个就是双向数据绑定，而v-model就是实现双向数据绑定，但注意的是，v-model只
+能运用在表单元素中，通常V会改变，也只是应用在表单元素中
+<input type="text" style="width:100%;" v-model="msg" @keyup="showMsg" />
+methods:{showMsg(){console.log(this.msg)}}
+@keyup 是按键松开的事件，当指定的按键松开会触发的事件。
+
+class 样式绑定
+<h1 :class="['thin', 'italic', {'active':flag} ]">这是一个很大很大的H1，大到你无法想象！！！</h1>  直接传递
+<h1 :class="classObj">这是一个很大很大的H1，大到你无法想象！！！</h1> 绑定data属性
+
+style大体如上
+
+v-for和key
+ 遍历普通数组<p v-for="(item,index) in list">索引:{{index}}----每一项:{{item}}</p>
+ 遍历对象数组<p v-for="(item,index) in listObj">索引:{{index}}----每一项id:{{item.id}}:每一项name:{{item.name}}</p>
+ 遍历对象<p v-for="(val, key, i) in user"> {{key}}:{{ val }} -- 索引:{{i}}</p>
+ 遍历数字<p v-for="count in 10">这是第 {{ count }} 次循环</p>
+: list、listObj、user都是vm实例的data绑定数据
+官方说明在使用v-for指令的时候:当在组件上使用 v-for 时，key 现在是必须的，我们现在并没有在vue组件中使用v-for指令，所以可以不带key属性，但是建议，在任何场景中使用v-for指令，都要带上key属性。比如:当在动态循环li标签时会出现的checkbox问题
+<p v-for="item in list" :key="item.id"><input type="checkbox">{{item.id}} --- {{item.name}}</p> 
+list:[{id: 1,name: 'z1'},{id: 2,name: 'z2'},{id: 3,name: 'z3'}]
+
+
+v-if和v-show
+v-if和v-show都可以控制元素的显示与隐藏,他们的区别在于:
+ v-if：每次都会重新删除或创建元素
+ v-show:每次不会重新进行DOM的删除和创建操作，只是切换了元素的 display:none 样式
+	如果元素频繁切换显示与隐藏，建议使用vshow
+
+<h3 v-if="flag">这是用v-if控制的元素</h3>
+<h3 v-show="flag">这是用v-show控制的元素</h3>
+<input type="button" @click="gaibian" > 元素控制变化</input>
+data:{
+flag:true
+},
+methods:{
+gaibian(){ this.flag = !this.flag }
+}
+
+
+vue过滤器
+{{xxx | 过滤器}} 或者 <p: v-bind=”title | 过滤器”></p>
+https://blog.csdn.net/qq_40323256/article/details/116355085 
+
+
+vue键盘修饰符
+<input type="text" class="form-control" v-model="name" @keyup.enter="add()">
+.enter . tab
+.delete .esc .space
+.up .down .left . right
+
+自定义键盘
+Vue.config.keyCodes.f2=113
+<input type="text" class="form-control" v-model="name" @keyup.f2="add()">
+
+自定义指令
+全局自定义指令: Vue.directive(‘指令名称’,{}) , 比如: v-focus 指令: Vue.directive(“focus”,{…})
+参数1:指令的名称，在定义的时候，指令的名称前面，不需要加 v- 前缀，在调用的时候，必须 在指令名称前 加上 v- 前缀来进行调用
+参数2:是一个对象，这个对象身上，有一些指令相关的钩子函数，这些函数在特定的阶段执行, 要记住的是，每一个钩子函数的第一个参数表示绑定了这个指令的dom元素，是一个原生js对象
+eg:
+Vue.directive("focus", {
+bind:function(el){…},
+inserted:function(el){…},
+update: function(el){…},
+componentUpdated:function(el){…},
+unbind:function(el){…}
+})
+bind:每当指令绑定到元素上的时候，会立即执行这个 bind 函数，只执行一
+次，一般用来做一些准备初始化工作
+ inserted:表示元素 插入到DOM完成之后，会立即调用，执行一次
+ update:当VNode更新的时候，会执行 update， 可能会触发多次，也就是绑
+定了Vue指令的dom元素发生改变时,这个改变包括很多，比如：样式、值、
+位置等等，只要这个元素和vue进行了数据绑定
+ componentUpdated: 同update一样，当VNode更新时, 但在它的回调里面，
+el是改变后的dom
+ unbind：元素从DOM删除时触发.(仅仅是删除)
+
+私有自定义指令:
+私有的就是在vm实例上添加directives属性即可
+directives: { // 自定义私有指令
+'fontweight': { // 设置字体粗细的
+bind: function (el, binding) {
+el.style.fontWeight = binding.value
+}
+},
+‘fontsize’: function (el, binding) { // 注意：这个 function 等同于 把 代码写到了 bind 和 update 中去
+el.style.fontSize = parseInt(binding.value) + 'px'
+}
+}
+<p v-fontweight="800" v-fontsize="28" v-color="'yellow'">这是自定义的私有指令，改变字体大小和粗细</p>
+
+
+vue-resource发送请求
+vue-resource发送网络请求，获取服务器数据: 分别发送get、post、jsonp请求
+Vue-Resource是提供了使用XMLHttpRequest或JSONP发送web请求和处理响应服务的一个Vue.js插件
+引入Vue-Resource实现ajax请求开发步骤:
+1. 安装vue-resource依赖: 
+cnpm i vue-resource –S
+2. 导入vue-reources,并调用Vue.use(vue-reources)方法使用vue-resource插件
+//导入vue-reource
+import VueResource from 'vue-resource'
+//vue使用vue-reource插件
+Vue.use(VueResource);
+
+<input type="button" value="get请求" @click="getInfo">
+<input type="button" value="post请求" @click="postInfo">
+<input type="button" value="jsonp请求" @click="jsonpInfo">
+get请求
+this.$http:获取vue-resource的http请求对象  //get内跟url then后的函数参数result为返回值多为json数据
+this.$http.get('https://www.apiopen.top/satinApi?type=1&page=1').then(function (result) {
+// 通过 result.body 拿到服务器返回的成功的数据
+console.log(result.body)
+//分析数据结构
+this.items = this.items.concat(result.body.data); 
+})
+
+
+post请求
+this.$http.post('https://www.apiopen.top/novelSearchApi', {
+name: "鬼吹灯"
+}, {
+emulateJSON: true
+}).then(result => {
+console.log(result.body)
+})
+{emulateJSON: true}就是
+设置提交表单类型。
+post方法的第二个参数，设
+置提交参数，
+
+sonp请求: 跨域请求
+由于浏览器的安全性限制，不允许AJAX访问 协议不同、域名不同、端口号不同的 数据接口，浏览器认为这
+种访问不安全，实现跨域请求的原理是通过动态创建script标签的形式，把script标签的src属性，指向数据接
+口的地址，因为script标签不存在跨域限制，这种数据获取方式，称作JSONP
+this.$http.jsonp('https://sug.so.360.cn/suggest',{
+//根据接口规则传递参数
+params:{word:'a',encodeout:'utf-8'}
+}).then(result => {
+console.log(result.body)
+})
+
+
+Vue-resource设置全局http参数
+Vue.http.options.root="https://www.apiopen.top/"
+Vue.http.options.emulateJSON = true
+发送请求时，就可以省略主机路径部分，发送post请求时，也不用单独设置参数了:
+//url地址一定不能带/
+this.$http.get('satinApi?type=1&page=1').then(function (result) {
+console.log(result.body)
+this.items = this.items.concat(result.body.data); 
+})
+this.$http.post('novelSearchApi', {name: "鬼吹灯"}).then(result => {
+console.log(result.body)
+})
+
+
+
+
+
+get请求及响应数据样例显示如下
+<input type="button" value="get请求" @click="getlnfo">
+<!-- 展示get请求后的数据 -->
+<li v-for="(item,index) in items" :key="item.ret">
+<p>{{item.ret}}</p>
+<p>{{item.wanip}}</p>
+<p>{{item.hostip}}</p>
+</li>
+
+ getlnfo(){
+        console.log("222")
+        this.$http.get('https://api.wrdan.com/ip?url=https://www.baidu.com').then(function (result) {
+            // 通过 result.body 拿到服务器返回的成功的数据
+            console.log(result.body)
+            //分析数据结构
+            this.items.push({ret:result.body.ret,hostip:result.body.hostip,wanip:result.body.wanip})
+            })
+    }
+
+
+post请求及响应数据样例显示如下
+<!--post数据展示-->
+<p v-html="postfanhui"></p>
+<div v-html="fanhui2"></div>
+postlnfo(){
+        this.$http.post('https://v2.alapi.cn/api/one', {
+            token: "LwExDtUWhF3rH5ib"}, {
+    emulateJSON: true
+}).then(result => {
+   this.postfanhui=result.body.data.subtitle;
+   this.fanhui2=result.body.data.content;
+   console.log(result.body);
+   console.log(result.body.data.subtitle);
+   console.log(result.body.data.content);
+})
+        
+    },
+
+
+jsonp请求及响应数据样例显示如下
+jsonpInfo(){
+        this.$http.jsonp('https://sug.so.360.cn/suggest',{
+//根据接口规则传递参数
+params:{word:'a',encodeout:'utf-8'}
+}).then(result => {
+console.log(result.body)
+})
+
+    }
+
+
+动画  //详细具体用时搜索
+
+过渡类名实现动画
+1：将要实现动画的元素用transition标签包裹
+2：定义入场和离场的2组6个css
+
+<transition>
+<h3 v-if="flag">这是一个H3</h3>
+</transition>
+
+<style>
+/* 入场 */
+.v-enter{
+opacity: 0;
+/* 一定要带px单位 */
+transform: translateX(150px);
+}
+.v-enter-to{ opacity: 1; transform: translateX(0px);}
+.v-enter-active{
+/* 入场过滤效果 */
+transition: all 0.8s ease;
+}
+/* 离场 */
+.v-leave{ opacity: 1; transform: translateX(0px);}
+.v-leave-to{ opacity: 0; transform: translateX(150px);}
+.v-leave-active{
+/* 离场过渡效果 */
+transition: all 0.8s ease;
+}
+</style>
+
+
+animate.css第三方类实现动画   //详细边用边了解
+1. 安装animate.css
+cnpm i animate.css -S
+2. import导入animate.css,并调用Vue.use()全局使用
+//引入animate.css
+import animated from "animate.css"
+//Vue使用动画库
+Vue.use(animated);
+3. 动画元素用transition包括，并分别指定enter-active-class和leave-active-class入场和离场动画
+
+
+钩子函数实现半场动画
+钩子函数一共有8个，分为入场4个和离场4个，只有在定义半场动画的时候，也就是只有入场的时候需要动
+画，才会使用钩子函数。因为如果都需要，不是半场动画，直接使用过渡函数实现动画即可
+
+//入场钩子 
+v-on:before-enter="beforeEnter"  只定义了入场钩子函数，对应vm实例的methods
+对象的函数
+v-on:enter="enter"
+v-on:after-enter="afterEnter"
+v-on:enter-cancelled="enterCancelled" 
+//离场钩子
+v-on:before-leave="beforeLeave"
+v-on:leave="leave"
+v-on:after-leave="afterLeave"
+v-on:leave-cancelled="leaveCancelled"
+>
+
+eg:
+methods: {
+//el，表示 要执行动画的那个DOM元素，是个原生的 JS DOM对象
+//表示动画入场之前，此时，动画尚未开始，可以 在 beforeEnter 中，设置元素开始动画之前的起始样式
+beforeEnter(el) {
+el.style.transform = "translate(0px, 0px)"
+},
+//表示动画开始之后的样式，这里，可以设置小球完成动画之后的，结束状态
+enter(el, done) {
+//必须el调用一个offset值方法，否则过渡效果不会出现
+el.offsetWidth;
+el.style.transform = "translate(150px, 450px)"
+el.style.transition = 'all 1s ease'
+//enter中必须调用done():表示动画完成，相当于直接调用afterEnter(),否则小球会静止
+done();
+},
+//动画完成之后
+afterEnter() {
+this.flag = !this.flag
+}
+}
+
+
+列表中的动画
+使用v-for指令动态渲染列表元素，列表元素在添加或者删除的时候，添加动画效果，实现动态列表过渡，不
+能使用transition 包裹，需要使用 transitionGroup，并同时定义过渡的2组6个css即可添加
+
+<!-- tag标签指定transition-group渲染为指定标签元素，默认会渲染成span -->
+<!-- appear属性: 列表在第一次场的时候也能应用上过渡动画-->
+<transition-group tag="ul" appear>
+<li v-for="(item, i) in list" :key="item.id" @click="del(i)">
+{{item.id}} --- {{item.name}}
+</li>
+</transition-group>
+.v-enter {pacity: 0; transform: translateY(80px);}
+.v-enter-to {opacity: 1; transform: translateY(0px);}
+.v-enter-active {transition: all 0.8s ease}
+.v-leave {opacity: 1; transform: translateY(0px);}
+.v-leave-to {opacity: 0; transform: translateY(80px);}
+.v-leave-active {transition: all 0.8s ease}
+
+*:默认删除中间列表元素，是没
+有整体动画效果的，为列表额外
+添加2个css
+v-move 和 v-leave-active,在删除
+中间元素的时候，后面的列表元
+素移动到新的位置上也有过渡效
+果。
+.v-move { 
+transition: all0.6s ease;
+}
+.v-leave-active {
+position: absolute;
+}
+
+
+
+
+
