@@ -1,0 +1,140 @@
+官方文档：
+https://element.eleme.cn/#/zh-CN/component/layout
+
+安装npm install element-ui -s
+引入：
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './App.vue';
+
+Vue.use(ElementUI);
+
+
+使用：
+具体直接看官网引用即可
+
+
+
+<template>
+  <div class="hello">
+    <h1>{{ msg }}</h1>
+    <!-- 常用按钮 -->
+    <el-button type="primary">主要按钮</el-button>
+    <el-button type="warning">警告按钮</el-button>
+    <!-- 下拉列表 -->
+    <el-dropdown split-button size="small" trigger="click">
+      下拉菜单
+      <el-dropdown-menu >
+        <el-dropdown-item>黄金糕</el-dropdown-item>
+        <el-dropdown-item divided>黄金糕2</el-dropdown-item>
+        <el-dropdown-item divided>黄金糕3</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
+    <el-radio v-model="radio" label="1">备选项</el-radio>
+  <el-radio v-model="radio" label="2">备选项</el-radio>{{radio}}
+    
+  选择功能{{value}}
+    <el-select v-model="value" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+
+
+  表格
+  <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="操作" >
+        <template slot-scope="scope">
+          <el-button type="primary" @click="h1(scope.row)">编辑</el-button>
+          <el-button type="primary" @click="h2(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HelloWorld',
+  data () {
+      return {
+        radio: '1',
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
+         tableData: [{
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1517 弄'
+          }, {
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-03',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1516 弄'
+          }]
+      }
+  },
+  props: {
+    msg: String
+  },
+  methods:{
+    h1(row){
+      alert(row.date)
+    },
+    h2(row){
+      alert(row.date)
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>

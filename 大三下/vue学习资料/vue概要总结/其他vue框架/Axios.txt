@@ -1,0 +1,64 @@
+https://www.w3cschool.cn/jquti/jquti-nqrz35xc.html
+一种ajax框架
+安装 npm i axios
+使用 
+import axios from 'axios'
+Vue.prototype.$axios=axios;
+可直接在组件中使用
+
+me(){
+      this.$axios.get('http://api.isoyu.com/api/News/new_list?type=1&page=20')
+    .then(res=>{
+      console.log(res);
+      console.log(res.data.data);
+      this.list=res.data.data;
+    }
+    )
+    .catch(function (error) {
+        console.log(error);
+    });
+    },
+
+
+data(){
+    return{
+      list:{},
+      list2:{},
+    }
+  },
+
+<ul class="list-group">
+            <li v-for="item in list">
+                <h3>{{item.title}}</h3>
+                <p>{{item.digest}}</p>
+            </li>
+        </ul>
+
+
+
+
+
+
+
+
+
+
+
+形式2
+me2(){
+      this.$axios('http://api.isoyu.com/api/News/new_list/get',{
+        params:{
+          type:1,
+        page:20
+        }
+      })
+    .then(res=>{
+      console.log(res);
+      console.log(res.data.data);
+      this.list2=res.data.data;
+    }
+    )
+    .catch(function (error) {
+        console.log(error);
+    });
+    }

@@ -1,0 +1,241 @@
+前端路由：
+主要通过url中的hash（#号）来实现不同页面之间的切换，同时http请求不会包含hash相关的内容；
+Vue-router 就是vue实现spa前端路由的js插件	
+
+ {由于是vue2},限定低router版本
+Vue-router基本使用
+1安装
+	npm i vue-router -S
+2导入路由组件并注册全局使用
+	import VueRouter from 'vue-router'  
+	Vue.use(VueRouter);
+3导入 路由需要的组件
+//导入组件
+import Login from "./components/Login.vue";
+import Regist from "./components/Regist.vue";
+4创建路由对象定义路由规则
+const router = new VueRouter({
+//routes表示配置路由匹配规则
+//path 表示监听
+//compoent 表示对应要展示的组件
+  routes: [
+    { path: "/login", component: Login },
+    { path: "/register", component: Regist },
+  ],
+});
+5将路由对象挂在到vm实例上
+new Vue({
+  render: (h) => h(App),
+  //将路由对象挂载到vm上 router:router  变量名和值相同时可以省略
+  router,
+}).$mount("#app");
+
+
+显示端
+<!--定义前端路由链接-->
+    <router-link to="/login">登录</router-link>
+    <router-link to="/register">注册</router-link>
+    <!--router--view是一个占位符，将来路由规则匹配到的组件就会展示到这个router-view中去-->
+    <router-view></router-view>
+
+
+路由封装  然后将路由对象暴漏出去
+封装
+import VueRouter from "vue-router";
+//导入组件
+import Login from "./components/Login.vue";
+import Regist from "./components/Regist.vue";
+//配置路由规则
+const router = new VueRouter({
+    routes: [
+      { path: "/login", component: Login },
+      { path: "/register", component: Regist },
+    ],
+  });
+  //对外暴漏对象
+  export default router;
+
+//引入
+//导入路由并将路由对象挂载到vm上
+import router from "./router"
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+new Vue({
+  render: (h) => h(App),
+  router,
+}).$mount("#app");
+
+
+
+
+
+
+
+
+<router-link to="/login">登录 </router-link> ==<a href="#/login" >登录</a>
+tag 属性 router-link默认渲染a标签 tag属性使其渲染指定标签  作用：不详
+<router-link to="/login" tag ="span">登录 </router-link>
+
+设置路由重定向
+//在routers中改
+routes: [
+      { path: "/login", component: Login },
+      { path: "/register", component: Regist },
+//重定向
+      {path:"/",redirect:"/login"}
+    ],
+
+
+
+设置router-link样式
+
+设置路由高亮
+默认路由对象提供 linkActiveClass属性，对应router-link-active样式
+更改方法
+1声明一个样式router-link-active 覆盖默认样式
+<style scoped>
+  .router-link-active{
+    color: red;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 30px;
+    text-decoration: underline;
+  }
+</style>
+2linkActiveClass指定自定义的样式
+先新建css文件 
+再导入css文件
+在routes属性外跟linkActiveClass属性
+const router = new VueRouter({
+    routes: [
+      { path: "/login", component: Login },
+      { path: "/register", component: Regist },
+      {path:"/",redirect:"/login"}
+    ],
+    linkActiveClass:"myactive"
+  });
+
+
+
+
+路由切换动画
+类同之前组件切换动画
+<transition mode="out-in">
+      <router-view></router-view>
+    </transition>
+//style中样式
+.v-enter { opacity: 0; transform: 
+translateX(150px);}
+.v-enter-to { opacity: 1; transform: 
+translateX(0px);}
+.v-enter-active { transition: all 0.8s ease; }
+.v-leave {opacity: 1; transform: translateX(0px);}
+.v-leave-to {opacity: 0; transform: 
+translateX(150px);}
+.v-leave-active {transition: all 0.8s ease;}
+
+
+
+
+路由规则中传递参数
+？query传参 
+ <router-link to="/login?name=admin&password=111">登录</router-link>
+路由规则不变，在接收的组件中如下方式调用参数
+{{this.$route.query.name}}----{{this.$route.query.password}}
+和restful传参
+<router-link to="/register/admin/11111">注册</router-link>
+路由规则更改如下：
+{ path: "/register/:username/:password", component: Regist },
+调用参数如下：
+{{this.$route.params.username}}----{{this.$route.params.password}}
+
+
+
+
+路由的嵌套
+ {path:"/account",component:Account,
+        children:[{path:"login",component:Login},{path:"register/:username/:password",component:Regist}]}
+
+在app组件中设置路由跳转account组件
+在account组件中设置路由跳转至登陆注册组件
+为防止登陆注册组件替换account在app中的位置更改路由规则
+{path:"/account",component:Account,
+        children:[{path:"login",component:Login},{path:"register/:username/:password",component:Regist}]}
+
+
+
+
+路由命名视图
+给router-view 设置name属性  然后设置components属性设定匹配规则 
+将name属性值如components属性值相匹配 
+
+//组件代码
+<h3>命名视图</h3>
+      <div class="header"> <router-view></router-view></div>
+    <div class="container" ><router-view name="left"></router-view><router-view name="main"></router-view></div>
+//路由代码核心
+//配置路由规则
+const router = new VueRouter({
+    routes: [{path:"/",components:{
+      "default":Header, //默认||空name匹配
+      "left":Left,
+      "main":Main
+      
+    }}]
+  });
+
+
+css样式
+<style lang="scss" scoped>
+.header{
+  background-color: orange;
+  height: 80px;
+}
+.container{   
+  display: flex;
+  height: 6000px;
+  div:nth-child(1){      //这种写法要导入sass-loader   导入时缺少多个东西但只需导入node-sass@^4.0.0
+    flex: 2;
+    background-color: green;
+  }
+  div:nth-child(2){
+    flex: 8;
+    background: pink;
+  }
+}
+</style>>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

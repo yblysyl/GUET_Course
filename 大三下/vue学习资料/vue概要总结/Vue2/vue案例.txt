@@ -1,0 +1,17 @@
+导入bootstrap
+import Bootstrap from "bootstrap/dist/css/bootstrap.min.css"
+
+安装bootstrap
+npm i bootstrap -s
+
+凡是在npm 安装依赖的时候出现 上图所示的警告(requires a peer of jquer@1.9.1-3)，表示当前这个库依赖的库没有安装上，只要将要求的依赖库安装上即可 如 npm i jquer@1.9.1-3
+
+cnpm常用安装命令的区别:
+ npm i module_name -S = > npm install module_name --save 写入到 dependencies 对象
+ npm i module_name -D => npm install module_name --save-dev 写入到 devDependencies 对象
+ npm i module_name -g 全局安装
+ npm i module_name 安装到当前目录的nodu_modules,但不会写入到dependencies和devDependencies中，在项目开发时，不建议使用
+
+案例代码见项目文件
+
+

@@ -1,0 +1,147 @@
+vuex 是管理多个vue组件共享数据的工具
+安装 npm i vuex@3 -s  //限制vue对应的vuex版本
+
+在根目录中创建store文件夹 在下边创建 index.js文件
+import Vue from 'vue'
+import Vuex from 'vuex'
+// 挂在vuex
+Vue.use(Vuex)
+const store = new Vuex.Store({
+    state:{
+        name:"yubinlei", //键值对
+
+    }
+})
+//导出
+export default store
+
+
+引人
+import Vue from 'vue'
+import App from './App.vue'
+import store from '../store'
+
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
+  store,
+}).$mount('#app')
+
+使用
+<h1>{{$store.state.name}}</h1>
+
+
+
+
+Vuex中的对象
+State：数据源存放状态
+mutations state:成员操作
+Getters:加工state成员给外界
+Actions:异步操作
+Modules:模块化状态管理
+
+
+
+
+
+mutations方法有默认的形参([state],[payload])
+state是vuex中的state pauload 是该方法被调用时传递参数使用的
+index.js代码
+mutations:{
+        edit(state,playload){
+            state.name=playload
+        }
+
+调用方式
+  <button @click="edit">获取修改后的数据</button>
+methods:{
+    edit(){
+      this.$store.commit("edit","yuyuyu")
+    }
+
+增删state成员
+在mutations的方法中增加or删除state对象
+Vue.set(state,"age",18)
+Vue.delete(state,"age")
+
+
+
+
+
+Getters:加工state成员给外界
+两个默认参数 state Vuex中的状态对象 getters 调用getters下的其他getter并使用
+getters:{
+        hebingxinxi(state){
+            return "姓名"+state.name
+        },
+        quanbu(state,getters){
+            return getters.hebingxinxi+"年龄"+state.age
+        }
+    },
+使用：
+<h1>getter测试{{this.$store.getters.hebingxinxi}}</h1>
+    <h1>getter2测试{{this.$store.getters.quanbu}}</h1>
+
+
+
+
+
+
+
+
+
+
+Actions:异步操作 
+Actions中的方法有两个参数 context 上下文  payload 挂载参数
+actions:{
+        aedit(context,payload){
+            setTimeout(()=>{context.commit('edit',payload)},2000)
+        }
+    },
+
+使用： //效果 延迟2s改变数据
+<button @click="edit4">延迟测试</button>
+
+edit4(){
+      this.$store.dispatch("aedit","yanchiyuyuyu")
+    }
+
+
+
+
+模块组： 将store分割成模块。
+//模块b a 类同
+const moduleB={
+    state:{
+        ceshi: "这是b"
+    }
+};
+//组装模块
+const store = new Vuex.Store({
+    modules:{
+        a:moduleA,
+        b:moduleB
+    }
+})
+
+引用
+<h1>测试模块a{{ $store.state.a.name }}</h1>
+    <h1>测试模块b{{ $store.state.b.ceshi}}</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
