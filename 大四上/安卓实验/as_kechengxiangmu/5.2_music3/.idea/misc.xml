@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/4_1gongxiangshuju/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/4_1gongxiangshuju/app/src/main/res/layout/list_item.xml" value="0.368692070030896" />
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/5.1_music2/app/src/main/res/layout/activity_main.xml" value="0.2033514492753623" />
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/5.1_music2/app/src/main/res/layout/bottom_media_toolbar.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/5.2_music3/app/src/main/res/layout/activity_main.xml" value="0.19947916666666668" />
+        <entry key="..\:/Users/yu'bin'lei/AndroidStudioProjects/as_kechengxiangmu/5.2_music3/app/src/main/res/layout/bottom_media_toolbar.xml" value="0.24365942028985507" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
